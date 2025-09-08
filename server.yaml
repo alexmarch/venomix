@@ -1,0 +1,5 @@
+server:
+  port: 3004
+  domain: http://localhost:3004
+  rewriteDomain: http://youtube.com
+  script: revoke.yaml

@@ -1,0 +1,40 @@
+{
+  "name": "venomix",
+  "version": "0.0.0",
+  "main": "server.ts",
+  "type": "module",
+  "scripts": {
+    "start": "node server.ts",
+    "start:pm2": "pm2 start server.ts --name venomix --interpreter node --interpreter-args='--loader ts-node/esm' --watch --ignore-watch='logs/* core/* scripts/*' --env production",
+    "dev": "nodemon --watch core --watch ./scripts -e ts,tsx,yaml --watch server.ts --exec \"node\" server.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "UNLICENSED",
+  "description": "",
+  "devDependencies": {
+    "@types/cheerio": "^0.22.35",
+    "@types/handlebars": "^4.0.40",
+    "@types/http-proxy": "^1.17.16",
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^24.3.1",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "cfonts": "^3.3.0",
+    "chalk": "^5.6.0",
+    "cheerio": "^1.1.2",
+    "handlebars": "^4.7.8",
+    "http-proxy": "^1.18.1",
+    "js-yaml": "^4.1.0",
+    "loglevel": "^1.9.2",
+    "loglevel-plugin-prefix": "^0.8.4",
+    "selfsigned": "^3.0.1",
+    "tldts": "^7.0.12"
+  },
+  "engines": {
+    "node": ">=24.7.0"
+  }
+}
