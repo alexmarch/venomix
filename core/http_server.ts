@@ -1,5 +1,5 @@
 import http from "http";
-import { readFileSync, existsSync } from 'fs';
+import { readFileSync, existsSync, statSync } from 'fs';
 import { extname, join } from 'path';
 
 import { type ProxyConfig } from "./script.ts";
@@ -52,9 +52,15 @@ export default class HttpServer extends Logger {
 
       if (existsSync(filePath)) {
         const ext = extname(filePath);
-        res.writeHead(200, { 'Content-Type': mimeTypes[ext] || 'application/octet-stream' });
-        res.end(readFileSync(filePath));
-        return;
+        if (ext) {
+          try {
+            res.writeHead(200, { 'Content-Type': mimeTypes[ext] || 'application/octet-stream' });
+            res.end(readFileSync(filePath, "utf-8"));
+            return;
+          } catch (err) {
+            this.logError(`Error reading static file: ${err}`);
+          }
+        }
       }
 
       if (script && script.config) {
