@@ -49,6 +49,31 @@ export default class Injector extends Logger {
     }
   }
 
+  public injectStaticAssets(html: string): string {
+    try {
+      if (!this.script?.config?.static_assets || this.script.config.static_assets.length === 0) {
+        return html;
+      }
+
+      const $ = load(html, { decodeEntities: false });
+
+      this.script.config.static_assets.forEach((asset) => {
+        if (asset.type === "text/javascript") {
+          $("body").append(`<script src="${this.args.domain}/${asset.url}" nonce></script>`);
+        } else if (asset.type === "text/css") {
+          $("head").append(`<link rel="stylesheet" href="${this.args.domain}/${asset.url}">`);
+        } else {
+          this.logWarn(`Unsupported static asset type: ${asset.type}`);
+        }
+      });
+
+      return $.html();
+    } catch (error) {
+      this.logError(error.message);
+      return html;
+    }
+  }
+
   public replaceDomainLinks(html: string): string {
     try {
       if (!this.args.domain) {

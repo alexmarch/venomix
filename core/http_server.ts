@@ -1,10 +1,25 @@
 import http from "http";
+import { readFileSync, existsSync } from 'fs';
+import { extname, join } from 'path';
 
 import { type ProxyConfig } from "./script.ts";
 import HttpProxy from "./http_proxy.ts";
 import Logger from "./logger.ts";
 import Script from "./script.ts";
 import Injector from "./injector.ts";
+
+const staticDir = join(process.cwd(), './static'); // Change to your static folder
+
+const mimeTypes: Record<string, string> = {
+  '.html': 'text/html',
+  '.js': 'application/javascript',
+  '.css': 'text/css',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.gif': 'image/gif',
+  '.svg': 'image/svg+xml',
+  '.json': 'application/json',
+};
 
 export type HttpServerOptions = {
   port?: number;
@@ -32,6 +47,15 @@ export default class HttpServer extends Logger {
       const url = req.url || "";
 
       let matchedProxy: ProxyConfig | undefined;
+
+      let filePath = join(staticDir, url);
+
+      if (existsSync(filePath)) {
+        const ext = extname(filePath);
+        res.writeHead(200, { 'Content-Type': mimeTypes[ext] || 'application/octet-stream' });
+        res.end(readFileSync(filePath));
+        return;
+      }
 
       if (script && script.config) {
         let proxy_list: ProxyConfig[] = script.config.proxy_list.filter(

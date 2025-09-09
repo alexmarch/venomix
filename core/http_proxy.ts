@@ -170,6 +170,7 @@ export default class HttpProxy extends Logger {
         // ====== Inject JS ======
         if (contentType.includes("text/html") && this.injector) {
           responseBodyHtml = this.injector.injectJS(responseBodyHtml);
+          responseBodyHtml = this.injector.injectStaticAssets(responseBodyHtml);
         }
 
         // ====== Rewrite headers =====

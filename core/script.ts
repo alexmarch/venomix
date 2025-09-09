@@ -3,6 +3,11 @@ import fs from "fs";
 import Logger from "./logger.ts";
 import { textWithColor } from "./utils.ts";
 
+export type StaticAsset = {
+  url: string;
+  type: string;
+};
+
 export type ServerConfig = {
   server: {
     port: number;
@@ -23,6 +28,7 @@ export type ScriptConfig = {
   name?: string;
   proxy_list: ProxyConfig[];
   js?: string[];
+  static_assets?: StaticAsset[];
 };
 
 export default class Script extends Logger {
