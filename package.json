@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "node server.ts",
-    "start:pm2": "pm2 start server.ts --name venomix --interpreter node --interpreter-args='--loader ts-node/esm' --env production",
+    "start:pm2": "pm2 start server.ts --interpreter node --interpreter-args='--loader ts-node/esm' --env production",
     "dev": "nodemon --watch core --watch ./scripts -e ts,tsx,yaml --watch server.ts --exec \"node\" server.ts"
   },
   "keywords": [],

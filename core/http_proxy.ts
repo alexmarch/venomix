@@ -192,7 +192,14 @@ export default class HttpProxy extends Logger {
         res.end(responseBodyHtml);
 
       } else {
-        res.writeHead(proxyRes.statusCode || 200, proxyRes.headers);
+        headers["Access-Control-Allow-Origin"] = req.headers.origin || "*";
+        headers["Access-Control-Allow-Methods"] = "GET,POST,PUT,DELETE,OPTIONS";
+        headers["Access-Control-Allow-Headers"] = req.headers["access-control-request-headers"] || "*";
+        headers["Access-Control-Allow-Credentials"] = "true";
+        delete headers["content-length"];
+        delete headers["transfer-encoding"];
+        delete headers["accept-ranges"];
+        res.writeHead(proxyRes.statusCode || 200, headers);
         res.write(responseBody);
         res.end();
       }

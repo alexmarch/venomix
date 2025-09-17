@@ -55,19 +55,22 @@ export default class Injector extends Logger {
         return html;
       }
 
-      const $ = load(html, { decodeEntities: false });
+      // const $ = load(html, { decodeEntities: false });
+      const body_scripts = [];
+      const head_scripts = [];
 
       this.script.config.static_assets.forEach((asset) => {
         if (asset.type === "text/javascript") {
-          $("body").append(`<script src="${this.args.domain}/${asset.url}" nonce></script>`);
+          body_scripts.push(`<script src="${this.args.domain}/${asset.url}" nonce></script>`);
         } else if (asset.type === "text/css") {
-          $("head").append(`<link rel="stylesheet" href="${this.args.domain}/${asset.url}">`);
-        } else {
-          this.logWarn(`Unsupported static asset type: ${asset.type}`);
+          head_scripts.push(`<link rel="stylesheet" href="${this.args.domain}/${asset.url}">`);
         }
       });
 
-      return $.html();
+      return html.replace("</body>", `${body_scripts.join("\n")}</body>`)
+        .replace("</head>", `${head_scripts.join("\n")}</head>`);
+
+      // return $.html();
     } catch (error) {
       this.logError(error.message);
       return html;

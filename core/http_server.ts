@@ -1,5 +1,5 @@
 import http from "http";
-import { readFileSync, existsSync, statSync } from 'fs';
+import { readFileSync, existsSync } from 'fs';
 import { extname, join } from 'path';
 
 import { type ProxyConfig } from "./script.ts";
